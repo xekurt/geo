@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import mqtt from 'mqtt/dist/mqtt'
 import Content from './Content'
 
@@ -9,6 +9,7 @@ import { saveData } from '../store/driverSlice'
 // THIS COMPONENT IS RESPONSIBLE FOR GETTING DATA FROM SERVER AND SAVING IT TO REDUX STORE
 function Main() {
   const dispatch = useDispatch()
+  const [loading, setLoading] = useState(false)
 
   const getDataFromServer = () => {
     const options = {
@@ -31,14 +32,25 @@ function Main() {
     return JSON.parse(producedData)
   }
   const saveDataToRedux = (actions, data) => {
+    setLoading(false)
     dispatch(actions(data))
   }
 
   useEffect(() => {
+    setLoading(true)
     getDataFromServer()
   }, [])
 
-  return <Content />
+  return (
+    <>
+      {loading && (
+        <div className="modal">
+          <h1>LOADING</h1>
+        </div>
+      )}
+      <Content />
+    </>
+  )
 }
 
 export default Main

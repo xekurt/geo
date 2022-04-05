@@ -18,7 +18,6 @@ const Content = () => {
     }
   }, [reduxData])
 
-  console.info({ locationData })
   return (
     <section className="container">
       <Map locations={locationData} />
